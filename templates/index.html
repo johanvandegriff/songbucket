@@ -1,7 +1,7 @@
 {% include 'header.html' %}
 
-<h1>This is a Flask Server</h1>
-<h2>With Vue.js</h2>
+<h1>SongBucket</h1>
+<h2>create music from building blocks of looping melodies and drum beats</h2>
 <div id="app">
     <p>{{ text }}</p>
     <p>[[ number ]]</p>
@@ -10,9 +10,13 @@
 <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
 <div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
 <br>
-<img id="drag1" src="img_logo.gif" draggable="true" ondragstart="drag(event)" width="336" height="69">
-<img id="drag2" src="img_logo.gif" draggable="true" ondragstart="drag(event)" width="336" height="69">
+<img id="drag1" src="drums.jpg" draggable="true" ondragstart="drag(event)" width="336" height="69">
+<img id="drag2" src="drums.jpg" draggable="true" ondragstart="drag(event)" width="336" height="69">
 
+<form id="btn" action="/upload" method="POST" enctype="multipart/form-data">
+                       <input id="btn" type="file" name="file" accept="image/*" onchange="this.form.submit()">
+                       <label for="file-picker" class="btn"></label>
+                    </form>
 
 <script src="/static/vue-2.6.11.js"></script>
 
