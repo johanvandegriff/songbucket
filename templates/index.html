@@ -6,12 +6,15 @@
     <p>{{ text }}</p>
     <p>[[ tracks ]]</p>
     <p v-for="(track, i) in tracks">
-        <a v-bind:href="'/download?file=' + track">[[ track ]]</a>
-        <audio v-bind:id="i">
+        <a :href="'/download?file=' + track">[[ track ]]</a>
+        <audio :id="i">
             <source v-bind:src="'/download?file=' + track" type="audio/mpeg">
         </audio>
-        <button v-bind:onclick="'document.getElementById(' + i + ').play()'">Play</button>
-        <button v-bind:onclick="'document.getElementById(' + i + ').pause()'">Pause</button>
+        <input type="checkbox" :id="'check' + i" :name="'check' + i" value="yes">
+        <label :for="'check' + i">play?</label>
+<!-- 
+        <button :onclick="'document.getElementById(' + i + ').play()'">Play</button>
+        <button :onclick="'document.getElementById(' + i + ').pause()'">Pause</button> -->
     </p>
 </div>
 <div class="drop" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
@@ -20,7 +23,7 @@
 <div class="drag" id="drag1" src="drums.jpg" draggable="true" ondragstart="drag(event)" width="336" height="69" style="background-color: aquamarine;">drag'n'drop 1</div>
 <div class="drag" id="drag2" src="drums.jpg" draggable="true" ondragstart="drag(event)" width="336" height="69" style="background-color: gold;">drag'n'drop 2</div>
 
-<form id="btn" action="/upload" method="POST" enctype="multipart/form-data">
+<form action="/upload" method="POST" enctype="multipart/form-data">
                        <input id="btn" type="file" name="file" accept="audio/*" onchange="this.form.submit()">
                        <label for="file-picker" class="btn"></label>
                     </form>
@@ -64,6 +67,16 @@
                 .then(response => response.json())
                 .then(json => {this.tracks = json
                 })
+            },
+            playAudio: function() {
+                this.tracks.forEach((element, index) => {
+                    // console.log(element, index, document.getElementById("check" + index).checked);
+                    if (document.getElementById("check" + index).checked) {
+                        document.getElementById(index).pause();
+                        document.getElementById(index).currentTime = 0;
+                        document.getElementById(index).play()
+                    }
+                });
             }
         },
         mounted () {
@@ -75,6 +88,9 @@
 
             this.getTracks();
             setInterval(this.getTracks, 5000);
+
+            this.playAudio();
+            setInterval(this.playAudio, 6154);
 
             console.log("song");
         }
