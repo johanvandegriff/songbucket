@@ -5,8 +5,13 @@
 <div id="app">
     <p>{{ text }}</p>
     <p>[[ tracks ]]</p>
-    <p v-for="track in tracks">
+    <p v-for="(track, i) in tracks">
         <a v-bind:href="'/download?file=' + track">[[ track ]]</a>
+        <audio v-bind:id="i">
+            <source v-bind:src="'/download?file=' + track" type="audio/mpeg">
+        </audio>
+        <button v-bind:onclick="'document.getElementById(' + i + ').play()'">Play</button>
+        <button v-bind:onclick="'document.getElementById(' + i + ').pause()'">Pause</button>
     </p>
 </div>
 <div class="drop" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
