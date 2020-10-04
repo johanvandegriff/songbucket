@@ -4,17 +4,19 @@
 <h2>create music from building blocks of looping melodies and drum beats</h2>
 <div id="app">
     <p>{{ text }}</p>
-    <p>[[ number ]]</p>
-    <p>[[ number2 ]]</p>
+    <p>[[ tracks ]]</p>
+    <p v-for="track in tracks">
+        <a v-bind:href="'/download?file=' + track">[[ track ]]</a>
+    </p>
 </div>
-<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-<div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+<div class="drop" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+<div class="drop" id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
 <br>
-<img id="drag1" src="drums.jpg" draggable="true" ondragstart="drag(event)" width="336" height="69">
-<img id="drag2" src="drums.jpg" draggable="true" ondragstart="drag(event)" width="336" height="69">
+<div class="drag" id="drag1" src="drums.jpg" draggable="true" ondragstart="drag(event)" width="336" height="69" style="background-color: aquamarine;">drag'n'drop 1</div>
+<div class="drag" id="drag2" src="drums.jpg" draggable="true" ondragstart="drag(event)" width="336" height="69" style="background-color: gold;">drag'n'drop 2</div>
 
 <form id="btn" action="/upload" method="POST" enctype="multipart/form-data">
-                       <input id="btn" type="file" name="file" accept="image/*" onchange="this.form.submit()">
+                       <input id="btn" type="file" name="file" accept="audio/*" onchange="this.form.submit()">
                        <label for="file-picker" class="btn"></label>
                     </form>
 
@@ -39,7 +41,8 @@
         el: "#app",
         data: {
             number: 0,
-            number2: 0
+            number2: 0,
+            tracks: []
         },
         created () {
           console.log("hi");
@@ -50,6 +53,12 @@
             },
             everyTwoSeconds: function() {
                 this.number++;
+            },
+            getTracks: function() {
+                fetch('list')
+                .then(response => response.json())
+                .then(json => {this.tracks = json
+                })
             }
         },
         mounted () {
@@ -58,6 +67,9 @@
 
             setInterval(
                 this.everyTwoSeconds, 2000);
+
+            this.getTracks();
+            setInterval(this.getTracks, 5000);
 
             console.log("song");
         }

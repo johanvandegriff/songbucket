@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-from flask import Flask, request, render_template, url_for
-import os
+from flask import Flask, request, render_template, url_for, send_file
+import os, json
 
 app = Flask(__name__)
 
@@ -41,9 +41,15 @@ def upload():
     return render_template("index.html")
 
 
-@app.route("/test")
-def test():
-    return "<h1>Hello, World! test123</h1>"
+@app.route("/list")
+def list_tracks():
+    return json.dumps(os.listdir(APP_ROOT+"/uploads"), indent=2)
+
+@app.route("/download", methods=["GET"])
+def download():
+    #https://www.roytuts.com/how-to-download-file-using-python-flask/
+    filename = "uploads/" + request.args.get("file", "")
+    return send_file(filename)
 
 if __name__ == "__main__":
     app.run()

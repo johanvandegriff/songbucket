@@ -1,4 +1,11 @@
-div {
+div.drag {
+  width: 300px;
+  height: 60px;
+  padding: 5px;
+  border: 1px solid #777777;
+}
+
+div.drop {
   width: 350px;
   height: 70px;
   padding: 10px;
